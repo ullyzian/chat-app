@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+  </head>
+
+  <body>
+    <div>
+      <div>
+        <h3>No message yet...</h3>
+        <div class="messages"></div>
+      </div>
+      <div>
+        <form action="" method="post">
+          <input type="text" class="message" placeholder="Write a message" />
+          <input type="submit" value="Send" />
+        </form>
+      </div>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+  <script>
+    var socket = io.connect("http://" + document.domain + ":" + location.port);
+
+    socket.on("connect", () => {
+      socket.emit("send", { data: "User connected" });
+      var form = $("form").on("submit", (e) => {
+        e.preventDefault();
+        let message = $("input.message").val();
+        const username = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("username"))
+          .split("=")[1];
+        socket.emit("send", { message: message, username: username });
+        $("input.message").val("").focus();
+      });
+    });
+
+    socket.on("response", (msg) => {
+      if (typeof msg.message !== "undefined") {
+        $("h3").remove();
+        $("div.messages").append("<div>" + msg.username + ": " + msg.message + " </div>");
+      }
+    });
+  </script>
+</html>
