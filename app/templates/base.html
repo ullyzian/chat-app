@@ -9,11 +9,32 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="../static/css/style.css" />
     <title>Chat</title>
   </head>
 
-  <body class="h-100" data-spy="scroll" data-target=".messages-list">
-    {% block content %} {% endblock content %}
+  <body class="h-100">
+    <div class="container py-3 d-flex flex-column">
+      <h2 class="text-center font-weight-light">Anonymous Chat app</h2>
+      <div class="row justify-content-center mb-2">
+        <a
+          href="/chats/1"
+          class="btn m-1 text-light {% if data.chat == 1 %} btn-primary {% else %} btn-secondary {% endif %}"
+          >Room 1</a
+        >
+        <a
+          href="/chats/2"
+          class="btn m-1 text-light {% if data.chat == 2 %} btn-primary {% else %} btn-secondary {% endif %}"
+          >Room 2</a
+        >
+        <a
+          href="/chats/3"
+          class="btn m-1 text-light {% if data.chat == 3 %} btn-primary {% else %} btn-secondary {% endif %}"
+          >Room 3</a
+        >
+      </div>
+      {% block content %} {% endblock content %}
+    </div>
 
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -31,52 +52,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-
-    <script>
-      var socket = io.connect("http://" + document.domain + ":" + location.port);
-
-      socket.on("connect", () => {
-        const username = document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("username"))
-          .split("=")[1];
-
-        socket.emit("send", { data: username + " connected" });
-        var form = $("form").on("submit", (e) => {
-          e.preventDefault();
-          let message = $("input.message").val();
-          if (message !== "") {
-            socket.emit("send", { message: message, username: username });
-          }
-          $("input.message").val("").focus();
-        });
-      });
-
-      socket.on("response", (msg) => {
-        if (typeof msg.history[0] !== "undefined") {
-          $("div.messages-list").empty();
-          msg.history.map((element) => {
-            $("div.messages-list").append(
-              "<div>" +
-                "<b class='text-primary'>" +
-                element.username +
-                "</b>: " +
-                element.message +
-                " </div>",
-            );
-          });
-          if (msg.data) {
-            $(".alert-window").append(
-              "<div class='alert alert-info mb-0' role='alert'>" + msg.data + "</div>",
-            );
-
-            $(".alert").alert();
-            setTimeout(function () {
-              $(".alert").remove();
-            }, 2000);
-          }
-        }
-      });
-    </script>
+    <script src="../static/js/script.js"></script>
   </body>
 </html>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block content %}
+<input type="hidden" name="room" value="{{ data.chat }}" id="room" />
+<div class="row justify-content-center flex-grow-1">
+  <div class="col-md-8">
+    <div
+      style="max-height: 500px;"
+      class="messages-list bg-light p-3 border rounded overflow-auto h-100"
+    ></div>
+  </div>
+</div>
+<div class="row justify-content-center my-3">
+  <form class="input-group col-md-8" style="height: 38px;" action="" method="post">
+    <input
+      type="text"
+      data-emojiable="true"
+      class="form-control message"
+      placeholder="Write a message..."
+    />
+    <div class="input-group-append">
+      <input class="btn btn-outline-secondary" type="submit" id="button-addon2" value="Send" />
+    </div>
+  </form>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-8 alert-window"></div>
+</div>
+{% endblock content %}

@@ -14,9 +14,10 @@ def create_connection():
 def create_tables():
     commands = (
         """
-        CREATE TABLE history (
+        CREATE TABLE chat (
             username VARCHAR(100) NOT NULL,
             message VARCHAR(255) NOT NULL,
+            room INTEGER NOT NULL,
             date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
         """,
