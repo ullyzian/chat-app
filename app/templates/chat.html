@@ -1,5 +1,22 @@
 {% extends 'base.html' %} {% block content %}
 <input type="hidden" name="room" value="{{ data.chat }}" id="room" />
+<div class="row justify-content-center mb-2">
+  <a
+    href="/chats/1"
+    class="btn m-1 text-light {% if data.chat == 1 %} btn-primary {% else %} btn-secondary {% endif %}"
+    >Room 1</a
+  >
+  <a
+    href="/chats/2"
+    class="btn m-1 text-light {% if data.chat == 2 %} btn-primary {% else %} btn-secondary {% endif %}"
+    >Room 2</a
+  >
+  <a
+    href="/chats/3"
+    class="btn m-1 text-light {% if data.chat == 3 %} btn-primary {% else %} btn-secondary {% endif %}"
+    >Room 3</a
+  >
+</div>
 <div class="row justify-content-center flex-grow-1">
   <div class="col-md-8">
     <div

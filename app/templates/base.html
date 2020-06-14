@@ -16,23 +16,6 @@
   <body class="h-100">
     <div class="container py-3 d-flex flex-column">
       <h2 class="text-center font-weight-light">Anonymous Chat app</h2>
-      <div class="row justify-content-center mb-2">
-        <a
-          href="/chats/1"
-          class="btn m-1 text-light {% if data.chat == 1 %} btn-primary {% else %} btn-secondary {% endif %}"
-          >Room 1</a
-        >
-        <a
-          href="/chats/2"
-          class="btn m-1 text-light {% if data.chat == 2 %} btn-primary {% else %} btn-secondary {% endif %}"
-          >Room 2</a
-        >
-        <a
-          href="/chats/3"
-          class="btn m-1 text-light {% if data.chat == 3 %} btn-primary {% else %} btn-secondary {% endif %}"
-          >Room 3</a
-        >
-      </div>
       {% block content %} {% endblock content %}
     </div>
 
