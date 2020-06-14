@@ -27,5 +27,8 @@ def handle_event(json, methods=["GET", "POST"]):
     for username, message, date in query[::-1]:
         history["history"].append(
             {"message": message, "username": username, "date": date.strftime("%H:%M:%S")})
+    
+    if ("data" in json.keys()):
+        history["data"] = json['data']
     conn.close()
     socketio.emit('response', history, callback=messageReceived)
