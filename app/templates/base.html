@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html class="h-100" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/css/emoji.min.css"
+    />
+    <title>Chat</title>
+  </head>
+
+  <body class="h-100" data-spy="scroll" data-target=".messages-list">
+    {% block content %} {% endblock content %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/js/config.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/js/util.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/js/jquery.emojiarea.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emoji-picker/1.1.5/js/emoji-picker.min.js"></script>
+    <script>
+      var socket = io.connect("http://" + document.domain + ":" + location.port);
+
+      socket.on("connect", () => {
+        socket.emit("send", { data: "User connected" });
+        var form = $("form").on("submit", (e) => {
+          e.preventDefault();
+          let message = $("input.message").val();
+          const username = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("username"))
+            .split("=")[1];
+          if (message !== "") {
+            socket.emit("send", { message: message, username: username });
+          }
+          $("input.message").val("").focus();
+        });
+      });
+
+      socket.on("response", (msg) => {
+        if (typeof msg.history[0] !== "undefined") {
+          $("div.messages-list").empty();
+          msg.history.map((element) => {
+            $("div.messages-list").append(
+              "<div>" +
+                "<b class='text-primary'>" +
+                element.username +
+                "</b>: " +
+                element.message +
+                " </div>",
+            );
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

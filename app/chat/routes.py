@@ -1,4 +1,4 @@
-from flask import render_template, make_response, request
+from flask import render_template, make_response
 from . import bp
 import requests
 import datetime
