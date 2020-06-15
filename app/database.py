@@ -1,4 +1,5 @@
 import psycopg2
+import psycopg2.extras
 import logging
 import sys
 
@@ -27,21 +28,19 @@ class Database():
             logging.error(e)
             sys.exit()
         finally:
-            print("Connection opened")
             logging.info("Connection opened successfully.")
 
     def run_query(self, query, *args):
         try:
             self.open_connection()
-            with self.conn.cursor() as cur:
+            with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
                 if 'SELECT' in query:
-                    records = []
                     cur.execute(query, *args)
                     result = cur.fetchall()
-                    for row in result:
-                        records.append(row)
+                    records = [{k: v for k, v in record.items()}
+                               for record in result]
                     cur.close()
-                    return records
+                    return records[::-1]
                 else:
                     result = cur.execute(query, *args)
                     self.conn.commit()
