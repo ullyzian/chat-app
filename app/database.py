@@ -2,8 +2,8 @@ import psycopg2
 import logging
 import sys
 
-LOG_FILENAME = 'postgres.log'
-logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
+logging.basicConfig(filename='postgres-info.log', level=logging.INFO)
+logging.basicConfig(filename='postgres-error.log', level=logging.ERROR)
 
 
 class Database():
