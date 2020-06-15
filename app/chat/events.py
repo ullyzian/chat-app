@@ -1,5 +1,5 @@
 from .. import socketio
-from ..connection import create_connection
+from .. import database
 
 
 def messageReceived(methods=["GET", "POST"]):
@@ -8,34 +8,27 @@ def messageReceived(methods=["GET", "POST"]):
 
 @socketio.on("send")
 def handle_event(json, methods=["GET", "POST"]):
-    cur, conn = create_connection()
     if ("message" in json.keys()):
-        cur.execute(
-            """
+        database.run_query("""
             INSERT INTO chat (username, message, room) VALUES (%s, %s, %s)
-            """, (json["username"], json["message"], json["room"])
-        )
-        conn.commit()
+            """, (json["username"], json["message"], json["room"]))
 
     print("Received: " + str(json))
 
     if ("room" in json.keys()):
-        cur.execute(
-            """
+        records = database.run_query("""
             SELECT * FROM chat WHERE room = %s ORDER BY date DESC LIMIT 100
-            """, json["room"]
-        )
+            """, json["room"])
 
         history = {"history": []}
-        query = cur.fetchall()
-        for username, message, room, date in query[::-1]:
+
+        for username, message, room, date in records[::-1]:
             history["history"].append(
                 {"message": message, "username": username, "date": date.strftime("%H:%M:%S")})
 
         if ("data" in json.keys()):
             history["data"] = json['data']
 
-        conn.close()
         socketio.emit('response', history, callback=messageReceived)
     else:
         socketio.emit('response', json, callback=messageReceived)
