@@ -2,6 +2,9 @@ import psycopg2
 import logging
 import sys
 
+LOG_FILENAME = 'postgres.log'
+logging.basicConfig(filename=LOG_FILENAME, level=logging.INFO)
+
 
 class Database():
     """Database class to connect, run queries and insert data to Postgres"""

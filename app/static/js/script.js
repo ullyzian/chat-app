@@ -22,7 +22,6 @@ socket.on("connect", () => {
   });
 });
 
-
 socket.on("response", (msg) => {
   if (typeof msg.history[0] !== "undefined") {
     // delete previos messages
