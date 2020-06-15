@@ -5,8 +5,8 @@ from .database import Database
 
 socketio = SocketIO()
 
-database = Database(os.getenv("USER"), os.getenv("PASSWORD"),
-                    os.getenv("HOST"), os.getenv("PORT"), os.getenv("DATABASE"))
+database = Database(os.environ.get("USER"), os.environ.get("PASSWORD"),
+                    os.environ.get("HOST"), os.environ.get("PORT"), os.environ.get("DATABASE"))
 
 
 def create_tables():
