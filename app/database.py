@@ -23,9 +23,11 @@ class Database():
                 self.conn = psycopg2.connect(user=self.user, password=self.password,
                                              host=self.host, port=self.port, database=self.database)
         except psycopg2.DatabaseError as e:
+            print(e)
             logging.error(e)
             sys.exit()
         finally:
+            print("Connection opened")
             logging.info("Connection opened successfully.")
 
     def run_query(self, query, *args):
